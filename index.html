@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salfi - El banco que crece contigo y con tu familia</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --blue-dark: #0b3d91;
+  --blue-primary: #1e6fd8;
+  --blue-medium: #2e86de;
+  --blue-light: #74b9ff;
+  --blue-pale: #eef5ff;
+  --gold: #d4af37;
+  --white: #ffffff;
+  --text-dark: #1a1a2e;
+  --text-gray: #5a5f72;
+  --radius: 24px;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--white);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* Background pattern */
+.bg-pattern {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
+  background-repeat: repeat;
+  background-size: 260px 260px;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0; width: 100%;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(30,111,216,0.15);
+  z-index: 1000;
+}
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1200px; margin: 0 auto; padding: 0 20px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.5rem; font-weight: 800; color: var(--blue-dark);
+  text-decoration: none;
+}
+.nav-logo img { height: 40px; width: auto; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  text-decoration: none; color: var(--text-gray);
+  font-weight: 600; font-size: 0.95rem; transition: color 0.25s;
+}
+.nav-links a:hover { color: var(--blue-primary); }
+.nav-cta {
+  background: var(--blue-primary); color: var(--white);
+  padding: 10px 24px; border-radius: 14px; font-weight: 700;
+  text-decoration: none; transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(30,111,216,0.35); }
+.mobile-menu { display: none; background: none; border: none; color: var(--blue-dark); font-size: 1.5rem; cursor: pointer; }
+
+/* Hero */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; padding: 120px 20px 80px;
+  background: linear-gradient(135deg, #0b3d91 0%, #1e6fd8 45%, #2e86de 100%);
+  overflow: hidden;
+}
+.hero::before {
+  content: ""; position: absolute; inset: -20% -20%;
+  background: url('4.png'); background-size: cover; background-position: center;
+  opacity: 0.18; filter: blur(0); z-index: 0;
+}
+.hero-content {
+  position: relative; z-index: 2; text-align: center; max-width: 800px;
+  color: var(--white);
+}
+.hero-tag {
+  display: inline-block; padding: 6px 16px; background: rgba(255,255,255,0.2);
+  border-radius: 20px; font-size: 0.9rem; font-weight: 700; margin-bottom: 16px;
+  backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.3);
+}
+.hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 900;
+  line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;
+}
+.hero p {
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  margin-bottom: 32px; opacity: 0.95; max-width: 600px; margin-left: auto; margin-right: auto;
+}
+.hero-actions {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+}
+.btn-primary {
+  background: var(--white); color: var(--blue-dark);
+  padding: 14px 32px; border-radius: 14px; font-weight: 800;
+  text-decoration: none; font-size: 1rem; transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.2); }
+.btn-outline {
+  background: transparent; color: var(--white);
+  border: 2px solid var(--white);
+  padding: 14px 32px; border-radius: 14px; font-weight: 800;
+  text-decoration: none; font-size: 1rem; transition: 0.2s;
+}
+.btn-outline:hover { background: var(--white); color: var(--blue-dark); }
+
+/* Section title */
+.section-title {
+  text-align: center; margin: 90px 0 24px;
+}
+.section-title h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900;
+  color: var(--blue-dark); margin-bottom: 12px;
+}
+.section-title p {
+  color: var(--text-gray); font-size: 1.1rem; max-width: 700px; margin: 0 auto;
+}
+.divider {
+  width: 56px; height: 4px; background: linear-gradient(90deg, var(--blue-primary), var(--blue-light));
+  margin: 12px auto 0; border-radius: 2px;
+}
+
+/* Philosophy grid */
+.philosophy {
+  padding: 80px 20px; background: var(--white);
+}
+.philo-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px; margin-top: 40px;
+}
+.philo-card {
+  background: var(--blue-pale);
+  padding: 36px 28px; border-radius: var(--radius);
+  border: 1px solid rgba(30,111,216,0.18);
+  position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
+}
+.philo-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(11,61,145,0.12); }
+.philo-card::before {
+  content: ""; position: absolute; top: 0; left: 0; width: 6px; height: 100%;
+  background: linear-gradient(180deg, var(--blue-primary), var(--blue-light));
+}
+.philo-tag {
+  font-size: 0.8rem; font-weight: 900; text-transform: uppercase;
+  color: var(--blue-primary); letter-spacing: 1px; margin-bottom: 10px; display: block;
+}
+.philo-card h3 {
+  font-size: 1.5rem; font-weight: 800; color: var(--blue-dark);
+  margin-bottom: 16px; line-height: 1.3;
+}
+.philo-card p {
+  color: var(--text-gray); font-size: 1rem; line-height: 1.7;
+}
+
+/* Features */
+.features {
+  padding: 80px 20px; background: linear-gradient(180deg, var(--blue-pale) 0%, var(--white) 100%);
+}
+.feature-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px; margin-top: 40px;
+}
+.feature-card {
+  background: var(--white); padding: 32px 24px;
+  border-radius: 20px; text-align: center;
+  border: 1px solid rgba(30,111,216,0.12);
+  transition: transform 0.25s, border-color 0.25s;
+}
+.feature-card:hover { transform: translateY(-5px); border-color: var(--blue-primary); }
+.feature-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--blue-primary), var(--blue-light));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 18px; font-size: 1.6rem; color: var(--white);
+}
+.feature-card h4 {
+  font-size: 1.2rem; font-weight: 800; color: var(--blue-dark); margin-bottom: 10px;
+}
+.feature-card p { color: var(--text-gray); font-size: 0.95rem; line-height: 1.6; }
+
+/* Stats */
+.stats {
+  padding: 70px 20px; background: var(--blue-dark);
+  color: var(--white);
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px; text-align: center;
+}
+.stat-number { font-size: 2.5rem; font-weight: 900; color: var(--gold); margin-bottom: 6px; }
+.stat-label { font-size: 1rem; opacity: 0.9; font-weight: 600; }
+
+/* CTA banner */
+.cta-banner {
+  padding: 90px 20px; text-align: center;
+  background: linear-gradient(135deg, var(--blue-medium) 0%, var(--blue-primary) 100%);
+  color: var(--white);
+}
+.cta-banner h2 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; margin-bottom: 16px;
+}
+.cta-banner p {
+  font-size: 1.15rem; opacity: 0.95; margin-bottom: 30px; max-width: 650px; margin-left: auto; margin-right: auto;
+}
+.cta-banner .btn { padding: 16px 40px; font-size: 1rem; }
+
+/* Footer */
+footer {
+  background: #0a265a; color: #c7d4f2; padding: 70px 20px 30px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px; max-width: 1200px; margin: 0 auto 50px; padding: 0 20px;
+}
+.footer-brand .logo { font-size: 1.6rem; font-weight: 900; color: var(--white); display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+.footer-brand img { height: 34px; width: auto; }
+.footer-brand p { font-size: 0.95rem; opacity: 0.85; line-height: 1.6; max-width: 260px; }
+.footer-col h4 { color: var(--white); font-size: 1.1rem; margin-bottom: 20px; font-weight: 800; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul a { color: #c7d4f2; text-decoration: none; font-size: 0.95rem; transition: 0.2s; }
+.footer-col ul a:hover { color: var(--blue-light); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 26px; text-align: center;
+  font-size: 0.9rem; opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .mobile-menu { display: block; }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .philo-grid { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr; }
+}
+
+/* Smooth reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+.reveal.active { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="bg-pattern" style="background-image: url('3.png');"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="2.png" alt="Salfi logo">
+      <span>SALFI</span>
+    </a>
+    <div class="nav-links">
+      <a href="#mision">Misión</a>
+      <a href="#vision">Visión</a>
+      <a href="#valores">Valores</a>
+      <a href="#features">Productos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <a href="https://salfi-banco-financiero.lovable.app/" class="nav-cta">Abrir cuenta</a>
+    <button class="mobile-menu" aria-label="Menú">☰</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">Banco Digital para toda la familia</span>
+    <h1>Salfi: El banco que crece contigo y con tu familia.</h1>
+    <p>Un banco digital simple, educativo y confiable que acompaña a cada integrante de la familia bogotana en su relación con el dinero, desde el primer ahorro de un niño hasta la tranquilidad financiera de un adulto mayor.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Abrir tu cuenta gratis</a>
+      <a href="#contenido-educativo" class="btn-outline">Contenido educativo</a>
+    </div>
+  </div>
+</header>
+
+<section class="philosophy" id="mision">
+  <div class="container">
+    <div class="section-title">
+      <h2>Nuestra filosofía</h2>
+      <div class="divider"></div>
+      <p>Misión, Visión y Valores que guían cada decisión en Salfi.</p>
+    </div>
+    <div class="philo-grid">
+      <div class="philo-card reveal">
+        <span class="philo-tag">Misión</span>
+        <h3>Acompañar a la familia bogotana</h3>
+        <p>Ofrecer un banco digital simple, educativo y confiable que crezca junto con cada usuario, desde el primer ahorro de un niño hasta la tranquilidad financiera de un adulto mayor. En Salfi creemos que aprender a manejar el dinero debe ser una experiencia cercana y sin miedo.</p>
+      </div>
+      <div class="philo-card reveal">
+        <span class="philo-tag">Visión</span>
+        <h3>El banco digital de referencia en Bogotá</h3>
+        <p>Convertirnos en la primera plataforma financiera pensada para acompañar a la familia completa y no solo al usuario individual, expandiendo después nuestra propuesta a otras ciudades del país.</p>
+      </div>
+      <div class="philo-card reveal">
+        <span class="philo-tag">Valores</span>
+        <h3>Humanos, Sociales y Ambientales</h3>
+        <p>Cercanía y empatía con todas las generaciones, inclusión financiera real para niños y adultos mayores, y una huella ambiental reducida al ser 100% digital.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="philosophy" id="vision" style="background: var(--blue-pale);">
+  <div class="container">
+    <div class="section-title">
+      <h2>Valores de Salfi</h2>
+      <div class="divider"></div>
+      <p>Principios que definen cómo actuamos y cómo cuidamos a cada familia.</p>
+    </div>
+    <div class="philo-grid">
+      <div class="philo-card reveal">
+        <span class="philo-tag">Valor Humano</span>
+        <h3>Cercanía y empatía</h3>
+        <p>Entendemos que un niño, un adulto y un adulto mayor tienen necesidades y ritmos diferentes frente al dinero digital. Escuchamos, explicamos con lenguaje claro y acompañamos a cada persona sin hacer sentir a nadie excluido.</p>
+      </div>
+      <div class="philo-card reveal">
+        <span class="philo-tag">Valor Social</span>
+        <h3>Inclusión financiera real</h3>
+        <p>Llevamos educación sobre el manejo del dinero a poblaciones que normalmente quedan fuera de las apps bancarias tradicionales, como los niños y los adultos mayores, promoviendo el ahorro y el bienestar familiar.</p>
+      </div>
+      <div class="philo-card reveal">
+        <span class="philo-tag">Valor Ambiental</span>
+        <h3>Banca 100% digital</span>
+        <p>Al ser un banco completamente digital reducimos el uso de papel y la infraestructura física de la banca tradicional, disminuyendo nuestra huella ambiental y promoviendo un consumo más sostenible.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-title">
+      <h2>Productos para toda la familia</h2>
+      <div class="divider"></div>
+      <p>Herramientas de una billetera digital completa en un solo lugar, segura y transparente.</p>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">💳</div>
+        <h4>Tarjetas de Crédito y Débito</h4>
+        <p>Tarjetas digitales y físicas para adultos, diseñadas para administrar gastos cotidianos con total control.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🏦</div>
+        <h4>Cuentas de Ahorro</h4>
+        <p>Cuentas para cada miembro de la familia, desde el primer ahorro de un niño hasta el fondo de emergencia familiar.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔄</div>
+        <h4>Transferencias</h4>
+        <p>Envía y recibe dinero al instante entre cuentas Salfi y a otros bancos, sin complicaciones y con total transparencia.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📱</div>
+        <h4>Banca Digital</h4>
+        <p>Gestiona todas tus finanzas desde una app simple, educativa y confiable, pensada para usuarios de todas las edades.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🧾</div>
+        <h4>Pago de Servicios</h4>
+        <p>Paga luz, agua, internet y más desde la app, sin filas ni trámites presenciales, todo desde tu celular.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📈</div>
+        <h4>Ahorros e Inversiones</h4>
+        <p>Haz crecer tu dinero con opciones de ahorro e inversión adaptadas a cada etapa de la vida familiar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats" id="contenido-educativo">
+  <div class="container">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-number">3</div>
+        <div class="stat-label">Generaciones acompañadas</div>
+      </div>
+      <div>
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Banco digital y educativo</div>
+      </div>
+      <div>
+        <div class="stat-number">Gratis</div>
+        <div class="stat-label">Contenido educativo para niños</div>
+      </div>
+      <div>
+        <div class="stat-number">24/7</div>
+        <div class="stat-label">Asistencia por voz para adultos mayores</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container">
+    <h2>Únete a Salfi hoy</h2>
+    <p>Abre tu cuenta digital gratis y comienza a crecer junto con tu familia. Educación financiera, cercanía y confianza en un mismo lugar.</p>
+    <a href="#" class="btn btn-primary">Abrir cuenta gratuita</a>
+  </div>
+</section>
+
+<footer id="contacto">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo">
+        <img src="2.png" alt="Salfi">
+        <span>SALFI</span>
+      </div>
+      <p>El banco que crece contigo y con tu familia. Banca digital simple, educativa y confiable para toda la familia bogotana.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="#mision">Misión</a></li>
+        <li><a href="#vision">Visión</a></li>
+        <li><a href="#valores">Valores</a></li>
+        <li><a href="#">Nosotros</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Productos</h4>
+      <ul>
+        <li><a href="#">Cuentas de ahorro</a></li>
+        <li><a href="#">Tarjetas</a></li>
+        <li><a href="#">Transferencias</a></li>
+        <li><a href="#">Pago de servicios</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Familia</h4>
+      <ul>
+        <li><a href="#">Banco de Niños</a></li>
+        <li><a href="#">Asistencia por voz</a></li>
+        <li><a href="#">Contenido educativo</a></li>
+        <li><a href="#">Ahorros e inversiones</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 Salfi Banco Digital. Todos los derechos reservados. Bogotá, Colombia.
+  </div>
+</footer>
+
+<script>
+const cards = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  });
+}, { threshold: 0.1 });
+
+cards.forEach(card => observer.observe(card));
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+const mobileMenu = document.querySelector('.mobile-menu');
+const navLinks = document.querySelector('.nav-links');
+mobileMenu.addEventListener('click', () => {
+  navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+  navLinks.style.flexDirection = 'column';
+  navLinks.style.position = 'absolute';
+  navLinks.style.top = '72px';
+  navLinks.style.right = '20px';
+  navLinks.style.background = '#fff';
+  navLinks.style.padding = '20px';
+  navLinks.style.borderRadius = '16px';
+  navLinks.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)';
+  navLinks.style.border = '1px solid rgba(30,111,216,0.15)';
+});
+</script>
+
+</body>
+</html>
